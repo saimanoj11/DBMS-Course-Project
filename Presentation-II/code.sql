@@ -125,3 +125,29 @@ INSERT INTO Disbursements (sanction_id, disbursed_amount, disbursement_date, tra
 (2, 40000.00, '2026-02-28', 'TXNREF10029385'),
 (3, 55000.00, '2026-03-16', 'TXNREF99887766'),
 (4, 30000.00, '2026-03-20', 'TXNREF99887767');
+
+--Comprehensive Query: Complete details for a specific Sanction ID (e.g., Sanction ID = 2)
+SELECT 
+    s.student_id,
+    CONCAT(s.first_name, ' ', s.last_name) AS student_name,
+    s.email,
+    s.department,
+    s.current_year,
+    b.account_number,
+    b.ifsc_code,
+    b.bank_name,
+    sc.scheme_name,
+    sa.sanction_id,
+    sa.sanctioned_amount,
+    sa.sanction_date,
+    d.disbursed_amount,
+    d.disbursement_date,
+    d.transaction_ref
+FROM Sanctions sa
+JOIN Applications a ON sa.application_id = a.application_id
+JOIN Students s ON a.student_id = s.student_id
+LEFT JOIN Bank_Details b ON s.student_id = b.student_id
+JOIN Schemes sc ON a.scheme_id = sc.scheme_id
+LEFT JOIN Disbursements d ON sa.sanction_id = d.sanction_id
+WHERE sa.sanction_id = 2;
+
